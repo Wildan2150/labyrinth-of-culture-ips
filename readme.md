@@ -2,15 +2,6 @@
 
 An educational maze game about Indonesian culture, built with React, TypeScript, and Tailwind CSS.
 
-## Features
-
-- Explore a 20x20 maze filled with checkpoints.
-- Answer quizzes about Indonesian culture at each checkpoint.
-- Score points for correct answers and race against the clock.
-- High score leaderboard (stored in browser local storage).
-- Responsive design with keyboard and virtual controls.
-- Beautiful UI with Lucide icons and Tailwind CSS.
-
 ## Game Mechanics
 
 - Navigate a 20x20 maze using keyboard arrows or on-screen controls.
