@@ -1,149 +1,151 @@
 import { Quiz } from '../types/gameTypes';
 
-export const quizData: Quiz[] = [
-  {
-    id: 1,
-    question: "Rumah adat Joglo berasal dari daerah mana?",
-    options: ["Jawa Tengah", "Sumatera Barat", "Bali", "Kalimantan"],
-    correctAnswer: 0,
-    category: "Rumah Adat"
-  },
-  {
-    id: 2,
-    question: "Alat musik tradisional Angklung berasal dari daerah?",
-    options: ["Jakarta", "Jawa Barat", "Yogyakarta", "Bali"],
-    correctAnswer: 1,
-    category: "Alat Musik"
-  },
-  {
-    id: 3,
-    question: "Tarian Kecak berasal dari daerah mana?",
-    options: ["Jawa Tengah", "Sumatera", "Bali", "Sulawesi"],
-    correctAnswer: 2,
-    category: "Tarian Daerah"
-  },
-  {
-    id: 4,
-    question: "Suku Dayak berasal dari pulau mana?",
-    options: ["Sumatera", "Jawa", "Kalimantan", "Papua"],
-    correctAnswer: 2,
-    category: "Suku Bangsa"
-  },
-  {
-    id: 5,
-    question: "Rumah adat Gadang terdapat di daerah?",
-    options: ["Sumatera Barat", "Sumatera Utara", "Riau", "Jambi"],
-    correctAnswer: 0,
-    category: "Rumah Adat"
-  },
-  {
-    id: 6,
-    question: "Alat musik Sasando berasal dari?",
-    options: ["Bali", "Lombok", "Nusa Tenggara Timur", "Maluku"],
-    correctAnswer: 2,
-    category: "Alat Musik"
-  },
-  {
-    id: 7,
-    question: "Tarian Saman berasal dari daerah?",
-    options: ["Aceh", "Sumatera Utara", "Riau", "Jambi"],
-    correctAnswer: 0,
-    category: "Tarian Daerah"
-  },
-  {
-    id: 8,
-    question: "Suku Asmat terkenal dengan kerajinan?",
-    options: ["Batik", "Ukiran Kayu", "Tenun", "Keramik"],
-    correctAnswer: 1,
-    category: "Suku Bangsa"
-  },
-  {
-    id: 9,
-    question: "Rumah adat Honai terdapat di daerah?",
-    options: ["Papua", "Maluku", "Sulawesi", "Kalimantan"],
-    correctAnswer: 0,
-    category: "Rumah Adat"
-  },
-  {
-    id: 10,
-    question: "Gamelan adalah alat musik tradisional dari?",
-    options: ["Sumatera", "Jawa", "Kalimantan", "Sulawesi"],
-    correctAnswer: 1,
-    category: "Alat Musik"
-  },
-  {
-    id: 11,
-    question: "Tari Piring berasal dari daerah mana?",
-    options: ["Sumatera Barat", "Bali", "Jawa Timur", "Sulawesi Selatan"],
-    correctAnswer: 0,
-    category: "Tarian Daerah"
-  },
-  {
-    id: 12,
-    question: "Senjata tradisional Rencong berasal dari?",
-    options: ["Aceh", "Sumatera Selatan", "Jawa Barat", "Papua"],
-    correctAnswer: 0,
-    category: "Senjata Tradisional"
-  },
-  {
-    id: 13,
-    question: "Rumah adat Limas berasal dari daerah?",
-    options: ["Sumatera Selatan", "Jawa Tengah", "Bali", "NTT"],
-    correctAnswer: 0,
-    category: "Rumah Adat"
-  },
-  {
-    id: 14,
-    question: "Alat musik Kolintang berasal dari?",
-    options: ["Sulawesi Utara", "Sumatera Barat", "Bali", "Jawa Tengah"],
-    correctAnswer: 0,
-    category: "Alat Musik"
-  },
-  {
-    id: 15,
-    question: "Tari Jaipong berasal dari daerah?",
-    options: ["Jawa Barat", "Jawa Timur", "Bali", "Sumatera Utara"],
-    correctAnswer: 0,
-    category: "Tarian Daerah"
-  },
-  {
-    id: 16,
-    question: "Suku Toraja berasal dari provinsi?",
-    options: ["Sulawesi Selatan", "Sulawesi Utara", "Sumatera Barat", "Kalimantan Timur"],
-    correctAnswer: 0,
-    category: "Suku Bangsa"
-  },
-  {
-    id: 17,
-    question: "Rumah adat Baileo berasal dari?",
-    options: ["Maluku", "Papua", "Jawa Barat", "Bali"],
-    correctAnswer: 0,
-    category: "Rumah Adat"
-  },
-  {
-    id: 18,
-    question: "Tari Reog Ponorogo berasal dari?",
-    options: ["Jawa Timur", "Jawa Tengah", "Bali", "Sumatera Selatan"],
-    correctAnswer: 0,
-    category: "Tarian Daerah"
-  },
-  {
-    id: 19,
-    question: "Alat musik Tifa berasal dari?",
-    options: ["Papua", "Jawa Barat", "Sumatera Barat", "Bali"],
-    correctAnswer: 0,
-    category: "Alat Musik"
-  },
-  {
-    id: 20,
-    question: "Suku Baduy berasal dari daerah?",
-    options: ["Banten", "Jawa Tengah", "Sumatera Utara", "Sulawesi Selatan"],
-    correctAnswer: 0,
-    category: "Suku Bangsa"
-  }
+type CulturalItem = {
+  name: string;
+  origin: string;
+};
+
+const traditionalHouses: CulturalItem[] = [
+  { name: "Joglo", origin: "Jawa Tengah" },
+  { name: "Gadang", origin: "Sumatera Barat" },
+  { name: "Honai", origin: "Papua" },
+  { name: "Limas", origin: "Sumatera Selatan" },
+  { name: "Baileo", origin: "Maluku" },
+  { name: "Tongkonan", origin: "Sulawesi Selatan" },
+  { name: "Rumah Panggung", origin: "Kalimantan" },
+  { name: "Rumah Betang", origin: "Kalimantan Barat" }
 ];
 
-export const getRandomQuiz = (usedIds: number[] = []): Quiz => {
+const traditionalMusics: CulturalItem[] = [
+  { name: "Angklung", origin: "Jawa Barat" },
+  { name: "Gamelan", origin: "Jawa" },
+  { name: "Sasando", origin: "Nusa Tenggara Timur" },
+  { name: "Kolintang", origin: "Sulawesi Utara" },
+  { name: "Tifa", origin: "Papua" },
+  { name: "Kecapi", origin: "Jawa Barat" },
+  { name: "Salung", origin: "Sumatera Barat" },
+  { name: "Gordang", origin: "Sumatera Utara" }
+];
+
+const traditionalDances: CulturalItem[] = [
+  { name: "Kecak", origin: "Bali" },
+  { name: "Saman", origin: "Aceh" },
+  { name: "Piring", origin: "Sumatera Barat" },
+  { name: "Jaipong", origin: "Jawa Barat" },
+  { name: "Reog Ponorogo", origin: "Jawa Timur" },
+  { name: "Tor-Tor", origin: "Sumatera Utara" },
+  { name: "Yospan", origin: "Papua" },
+  { name: "Cakalele", origin: "Maluku" }
+];
+
+const ethnicGroups: CulturalItem[] = [
+  { name: "Dayak", origin: "Kalimantan" },
+  { name: "Asmat", origin: "Papua" },
+  { name: "Toraja", origin: "Sulawesi Selatan" },
+  { name: "Baduy", origin: "Banten" },
+  { name: "Batak", origin: "Sumatera Utara" },
+  { name: "Minangkabau", origin: "Sumatera Barat" },
+  { name: "Sasak", origin: "Lombok" },
+  { name: "Bugis", origin: "Sulawesi Selatan" }
+];
+
+const traditionalWeapons: CulturalItem[] = [
+  { name: "Rencong", origin: "Aceh" },
+  { name: "Kujang", origin: "Jawa Barat" },
+  { name: "Keris", origin: "Jawa" },
+  { name: "Mandau", origin: "Kalimantan" },
+  { name: "Badik", origin: "Sulawesi" },
+  { name: "Clurit", origin: "Jawa Timur" },
+  { name: "Pedang Jenawi", origin: "Sumatera Barat" },
+  { name: "Sumpit", origin: "Kalimantan" }
+];
+
+// Template soal untuk berbagai variasi
+const questionTemplates = {
+  house: [
+    { template: (item: CulturalItem) => `Rumah adat ${item.name} berasal dari daerah mana?`, answerType: 'origin' as const },
+    { template: (item: CulturalItem) => `Apa nama rumah adat khas ${item.origin}?`, answerType: 'name' as const },
+    { template: (item: CulturalItem) => `Daerah ${item.origin} memiliki rumah adat bernama?`, answerType: 'name' as const }
+  ],
+  music: [
+    { template: (item: CulturalItem) => `Alat musik ${item.name} berasal dari daerah mana?`, answerType: 'origin' as const },
+    { template: (item: CulturalItem) => `Alat musik tradisional khas ${item.origin} adalah?`, answerType: 'name' as const },
+    { template: (item: CulturalItem) => `Daerah ${item.origin} terkenal dengan alat musik bernama?`, answerType: 'name' as const }
+  ],
+  dance: [
+    { template: (item: CulturalItem) => `Tarian ${item.name} berasal dari daerah mana?`, answerType: 'origin' as const },
+    { template: (item: CulturalItem) => `Apa nama tarian tradisional dari ${item.origin}?`, answerType: 'name' as const },
+    { template: (item: CulturalItem) => `Tarian khas ${item.origin} adalah?`, answerType: 'name' as const }
+  ],
+  ethnic: [
+    { template: (item: CulturalItem) => `Suku ${item.name} berasal dari provinsi mana?`, answerType: 'origin' as const },
+    { template: (item: CulturalItem) => `Apa nama suku asli dari daerah ${item.origin}?`, answerType: 'name' as const },
+    { template: (item: CulturalItem) => `Suku yang mendiami wilayah ${item.origin} disebut?`, answerType: 'name' as const }
+  ],
+  weapon: [
+    { template: (item: CulturalItem) => `Senjata tradisional ${item.name} berasal dari mana?`, answerType: 'origin' as const },
+    { template: (item: CulturalItem) => `Senjata khas daerah ${item.origin} adalah?`, answerType: 'name' as const },
+    { template: (item: CulturalItem) => `Apa nama senjata tradisional dari ${item.origin}?`, answerType: 'name' as const }
+  ]
+};
+
+// Helper untuk shuffle array
+function shuffleArray<T>(array: T[]): T[] {
+  return array
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
+
+// Fungsi generate soal dari data dan template
+type TemplateWithAnswerType = {
+  template: (item: CulturalItem) => string;
+  answerType: 'origin' | 'name';
+};
+
+function generateQuizFromData(
+  data: CulturalItem[],
+  templates: TemplateWithAnswerType[],
+  category: string
+): Quiz[] {
+  return data.map((item, idx) => {
+    // Pilih template random
+    const { template, answerType } = templates[Math.floor(Math.random() * templates.length)];
+    const question = template(item);
+
+    let correct: string;
+    let distractors: string[];
+    if (answerType === 'origin') {
+      correct = item.origin;
+      distractors = data.filter(d => d.origin !== item.origin).map(d => d.origin);
+    } else {
+      correct = item.name;
+      distractors = data.filter(d => d.name !== item.name).map(d => d.name);
+    }
+    const optionsRaw = shuffleArray([correct, ...shuffleArray(distractors).slice(0, 3)]);
+    const correctAnswer = optionsRaw.indexOf(correct);
+
+    return {
+      id: `${category}-${idx + 1}`,
+      question,
+      options: optionsRaw,
+      correctAnswer,
+      category
+    };
+  });
+}
+
+// Generate semua soal
+const quizData: Quiz[] = [
+  ...generateQuizFromData(traditionalHouses, questionTemplates.house, "Rumah Adat"),
+  ...generateQuizFromData(traditionalMusics, questionTemplates.music, "Alat Musik"),
+  ...generateQuizFromData(traditionalDances, questionTemplates.dance, "Tarian Daerah"),
+  ...generateQuizFromData(ethnicGroups, questionTemplates.ethnic, "Suku Bangsa"),
+  ...generateQuizFromData(traditionalWeapons, questionTemplates.weapon, "Senjata Tradisional"),
+];
+
+// Fungsi untuk mengambil soal random tanpa duplikat id
+export const getRandomQuiz = (usedIds: (string | number)[] = []): Quiz => {
   const availableQuizzes = quizData.filter(quiz => !usedIds.includes(quiz.id));
   if (availableQuizzes.length === 0) return quizData[0];
 
@@ -156,7 +158,6 @@ export const getRandomQuiz = (usedIds: number[] = []): Quiz => {
     originalIndex: idx,
   }));
 
-  // Fungsi shuffle sederhana
   for (let i = optionsWithIndex.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
@@ -171,3 +172,5 @@ export const getRandomQuiz = (usedIds: number[] = []): Quiz => {
     correctAnswer: newCorrectAnswer,
   };
 };
+
+export { quizData };

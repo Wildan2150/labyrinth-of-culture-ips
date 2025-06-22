@@ -23,7 +23,7 @@ const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                 🎮 Kontrol Permainan
               </h3>
-              
+
               {/* Desktop Controls */}
               <div className="bg-gray-50 rounded-2xl p-6 mb-4">
                 <h4 className="font-semibold text-gray-700 mb-3">Desktop:</h4>
@@ -43,7 +43,7 @@ const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
                     <ArrowRight className="w-6 h-6 text-gray-600" />
                   </div>
                 </div>
-                <p className="text-gray-600 text-center mt-3">Gunakan tombol panah untuk bergerak</p>
+                <p className="text-gray-600 text-center mt-3">Gunakan tombol panah di keyboard untuk bergerak</p>
               </div>
 
               {/* Mobile Controls */}
@@ -63,46 +63,72 @@ const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
               </h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                  <div className="w-8 min-w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
                   <div>
                     <p className="text-gray-700">Bergeraklah dalam labirin menggunakan kontrol yang tersedia</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+                  <div className="w-8 min-w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
                   <div>
                     <p className="text-gray-700">Temukan checkpoint yang ditandai dengan ikon 📜</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+                  <div className="w-8 min-w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
                   <div>
                     <p className="text-gray-700">Jawab pertanyaan budaya Indonesia di setiap checkpoint</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+                  <div className="w-8 min-w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
                   <div>
-                    <p className="text-gray-700">Jawaban benar membuka jalan baru dan menambah skor</p>
+                    <p className="text-gray-700">Jawaban benar akan menambah skor dan dapat melanjutkan perjalanan</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">5</div>
+                  <div className="w-8 min-w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">5</div>
                   <div>
-                    <p className="text-gray-700">Jawaban salah menghalangi jalan, coba lagi!</p>
+                    <p className="text-gray-700">Jawaban salah akan mengembalikan pemain ke lokasi awal</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">6</div>
+                  <div className="w-8 min-w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">6</div>
                   <div>
                     <p className="text-gray-700">Capai garis finish (🏁) untuk menyelesaikan permainan</p>
                   </div>
                 </div>
+              </div>
+            </div>
+            
+            {/* Level Selector Info */}
+            <div>
+              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                🎚️ Pilihan Level
+              </h3>
+              <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 mb-6">
+                <p className="text-gray-700 mb-2">
+                  Sebelum memulai permainan, kamu dapat memilih tingkat kesulitan:
+                </p>
+                <ul className="list-disc list-inside text-gray-700 space-y-1">
+                  <li>
+                    <span className="font-semibold text-green-700">Easy</span>: Labirin kecil (11x11), cocok untuk pemula.
+                  </li>
+                  <li>
+                    <span className="font-semibold text-yellow-700">Normal</span>: Labirin sedang (19x19), tantangan seimbang.
+                  </li>
+                  <li>
+                    <span className="font-semibold text-red-700">Hard</span>: Labirin besar (35x35), untuk pemain berpengalaman.
+                  </li>
+                </ul>
+                <p className="text-gray-700 mt-2">
+                  Pilihan level akan mempengaruhi ukuran dan tingkat kesulitan labirin.
+                </p>
               </div>
             </div>
 
@@ -131,6 +157,10 @@ const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
                 🎯 Topik Pembelajaran
               </h3>
               <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-4 text-center">
+                  <div className="text-2xl mb-2">👥</div>
+                  <p className="font-semibold text-gray-700">Suku Bangsa</p>
+                </div>
                 <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-2xl p-4 text-center">
                   <div className="text-2xl mb-2">🏠</div>
                   <p className="font-semibold text-gray-700">Rumah Adat</p>
@@ -143,9 +173,9 @@ const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
                   <div className="text-2xl mb-2">🎵</div>
                   <p className="font-semibold text-gray-700">Alat Musik</p>
                 </div>
-                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-4 text-center">
-                  <div className="text-2xl mb-2">👥</div>
-                  <p className="font-semibold text-gray-700">Suku Bangsa</p>
+                <div className="bg-gradient-to-br from-gray-50 to-gray-200 rounded-2xl p-4 text-center col-span-2">
+                  <div className="text-2xl mb-2">⚔️</div>
+                  <p className="font-semibold text-gray-700">Senjata Tradisional</p>
                 </div>
               </div>
             </div>

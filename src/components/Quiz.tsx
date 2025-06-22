@@ -14,12 +14,12 @@ const Quiz: React.FC<QuizProps> = ({ quiz, onAnswer }) => {
 
   const handleAnswer = (answerIndex: number) => {
     if (showResult) return;
-    
+
     setSelectedAnswer(answerIndex);
     const correct = answerIndex === quiz.correctAnswer;
     setIsCorrect(correct);
     setShowResult(true);
-    
+
     setTimeout(() => {
       onAnswer(correct);
     }, 1000);
@@ -27,19 +27,19 @@ const Quiz: React.FC<QuizProps> = ({ quiz, onAnswer }) => {
 
   const getOptionClass = (index: number) => {
     if (!showResult) {
-      return selectedAnswer === index 
-        ? 'bg-blue-500 text-white transform scale-105' 
+      return selectedAnswer === index
+        ? 'bg-blue-500 text-white transform scale-105'
         : 'bg-white hover:bg-blue-50 hover:scale-105';
     }
-    
+
     if (index === quiz.correctAnswer) {
       return 'bg-green-500 text-white';
     }
-    
+
     if (index === selectedAnswer && !isCorrect) {
       return 'bg-red-500 text-white';
     }
-    
+
     return 'bg-gray-100 text-gray-500';
   };
 
@@ -47,11 +47,11 @@ const Quiz: React.FC<QuizProps> = ({ quiz, onAnswer }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform">
         {/* Quiz Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4">
+        <div className="flex flex-row items-center justify-center text-center mb-6">
+          <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-2">
             <HelpCircle className="w-8 h-8 text-white" />
           </div>
-          <div className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold mb-4">
+          <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
             {quiz.category}
           </div>
         </div>
@@ -100,9 +100,9 @@ const Quiz: React.FC<QuizProps> = ({ quiz, onAnswer }) => {
               </span>
             </div>
             <p className="text-sm">
-              {isCorrect 
-                ? 'Jalan terbuka! Skor bertambah +10' 
-                : 'Jalan masih tertutup. Coba lagi!'}
+              {isCorrect
+                ? 'Jawaban kamu benar! Silakan lanjut ke checkpoint berikutnya.'
+                : 'Jawaban belum tepat. Yuk, coba lagi!'}
             </p>
           </div>
         )}

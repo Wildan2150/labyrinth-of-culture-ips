@@ -1,19 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { GameState, Position } from '../types/gameTypes';
-import { createMaze, getCheckpointPositions, createCheckpoints, canMoveTo, isFinishPosition, MAZE_SIZE } from '../utils/gameLogic';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+
+import { GameState } from '../types/gameTypes';
+import { createMaze, getCheckpointPositions, createCheckpoints, canMoveTo, isFinishPosition } from '../utils/gameLogic';
 import Maze from './Maze';
 import GameUI from './GameUI';
 import Quiz from './Quiz';
 import VirtualControls from './VirtualControls';
 import PauseMenu from './PauseMenu';
+import { getRandomQuiz } from '../utils/quizData';
 
 interface GameScreenProps {
   onGameFinish: (score: number, time: number) => void;
   onBackToMenu: () => void;
+  mazeSize: number;
 }
 
-const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu }) => {
-  const [maze] = useState(() => createMaze());
+const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu, mazeSize }) => {
+  const [maze, setMaze] = useState(() => createMaze(mazeSize));
   const [gameState, setGameState] = useState<GameState>(() => {
     const checkpointPositions = getCheckpointPositions(maze);
     const checkpoints = createCheckpoints(checkpointPositions);
@@ -31,8 +34,9 @@ const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu }) =
     };
   });
 
-
-
+  const [showFinishWarning, setShowFinishWarning] = useState(false);
+  const finishWarningTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [lastCheckpointPosition, setLastCheckpointPosition] = useState<{ x: number, y: number }>({ x: 1, y: 1 });
 
 
   // Timer effect
@@ -60,6 +64,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu }) =
       if (gameState.completedCheckpoints === gameState.checkpoints.length) {
         onGameFinish(gameState.score, gameState.timeElapsed);
         return;
+      } else {
+        if (!showFinishWarning) {
+          setShowFinishWarning(true);
+          // Clear timeout sebelumnya jika ada
+          if (finishWarningTimeout.current) clearTimeout(finishWarningTimeout.current);
+          finishWarningTimeout.current = setTimeout(() => setShowFinishWarning(false), 2000);
+        }
       }
     }
 
@@ -90,6 +101,66 @@ const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu }) =
     gameState.score,
     gameState.timeElapsed,
     gameState.showQuiz,
+    gameState.currentQuiz,
+    showFinishWarning
+  ]);
+
+  useEffect(() => {
+    const { x, y } = gameState.playerPosition;
+
+    // Check for finish
+    if (isFinishPosition(x, y, maze)) {
+      if (gameState.completedCheckpoints === gameState.checkpoints.length) {
+        onGameFinish(gameState.score, gameState.timeElapsed);
+        return;
+      } else {
+        setShowFinishWarning(true);
+        // Optional: otomatis hilang setelah beberapa detik
+        setTimeout(() => setShowFinishWarning(false), 2000);
+      }
+    }
+
+    // Check for checkpoint
+    const checkpoint = gameState.checkpoints.find(
+      cp => cp.position.x === x && cp.position.y === y && !cp.completed
+    );
+
+    if (
+      checkpoint &&
+      !gameState.showQuiz &&
+      !gameState.currentQuiz
+    ) {
+      // Jika checkpoint sudah pernah dicoba (gagal), ganti soal baru
+      let updatedCheckpoints = gameState.checkpoints;
+      let quizToShow = checkpoint.quiz;
+      if (checkpoint.attempted) {
+        // Kumpulkan semua id quiz yang sudah dipakai di checkpoint lain
+        const usedQuizIds = gameState.checkpoints.map(cp => cp.quiz.id);
+        const newQuiz = getRandomQuiz(usedQuizIds);
+        updatedCheckpoints = gameState.checkpoints.map(cp =>
+          cp.position.x === x && cp.position.y === y
+            ? { ...cp, quiz: newQuiz, attempted: false } // reset attempted
+            : cp
+        );
+        quizToShow = newQuiz;
+      }
+      setGameState(prev => ({
+        ...prev,
+        checkpoints: updatedCheckpoints,
+        currentQuiz: quizToShow,
+        showQuiz: true,
+        gameStatus: 'paused'
+      }));
+    }
+  }, [
+    gameState.playerPosition,
+    gameState.checkpoints,
+    gameState.completedCheckpoints,
+    maze,
+    onGameFinish,
+    gameState.score,
+    gameState.timeElapsed,
+    gameState.showQuiz,
     gameState.currentQuiz
   ]);
 
@@ -106,13 +177,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu }) =
           newY = Math.max(0, y - 1);
           break;
         case 'down':
-          newY = Math.min(MAZE_SIZE - 1, y + 1);
+          newY = Math.min(maze.length - 1, y + 1);
           break;
         case 'left':
           newX = Math.max(0, x - 1);
           break;
         case 'right':
-          newX = Math.min(MAZE_SIZE - 1, x + 1);
+          newX = Math.min(maze.length - 1, x + 1);
           break;
       }
 
@@ -169,23 +240,39 @@ const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu }) =
 
   const handleQuizAnswer = (correct: boolean) => {
     setGameState(prev => {
-      const updatedCheckpoints = prev.checkpoints.map(cp =>
-        cp.quiz.id === prev.currentQuiz?.id ? { ...cp, completed: correct } : cp
-      );
-
-      return {
-        ...prev,
-        checkpoints: updatedCheckpoints,
-        completedCheckpoints: correct ? prev.completedCheckpoints + 1 : prev.completedCheckpoints,
-        score: correct ? prev.score + 10 : prev.score,
-        currentQuiz: null,
-        showQuiz: false,
-        gameStatus: 'playing',
-        // Jika salah, kembalikan ke posisi awal (1,1)
-        playerPosition: correct ? prev.playerPosition : { x: 1, y: 1 },
-        // timeStarted tetap seperti sebelumnya
-        timeStarted: prev.timeStarted + (Date.now() - prev.timeStarted - prev.timeElapsed * 1000)
-      };
+      if (correct) {
+        const updatedCheckpoints = prev.checkpoints.map(cp =>
+          cp.quiz.id === prev.currentQuiz?.id ? { ...cp, completed: true } : cp
+        );
+        const currentCheckpoint = prev.checkpoints.find(cp => cp.quiz.id === prev.currentQuiz?.id);
+        if (currentCheckpoint) {
+          setLastCheckpointPosition(currentCheckpoint.position);
+        }
+        return {
+          ...prev,
+          checkpoints: updatedCheckpoints,
+          completedCheckpoints: prev.completedCheckpoints + 1,
+          score: prev.score + 10,
+          currentQuiz: null,
+          showQuiz: false,
+          gameStatus: 'playing',
+          playerPosition: prev.playerPosition,
+          timeStarted: prev.timeStarted + (Date.now() - prev.timeStarted - prev.timeElapsed * 1000)
+        };
+      } else {
+        const updatedCheckpoints = prev.checkpoints.map(cp =>
+          cp.quiz.id === prev.currentQuiz?.id ? { ...cp, attempted: true } : cp
+        );
+        return {
+          ...prev,
+          checkpoints: updatedCheckpoints,
+          currentQuiz: null,
+          showQuiz: false,
+          gameStatus: 'playing',
+          playerPosition: lastCheckpointPosition, // kembali ke checkpoint terakhir
+          timeStarted: prev.timeStarted + (Date.now() - prev.timeStarted - prev.timeElapsed * 1000)
+        };
+      }
     });
   };
 
@@ -203,6 +290,26 @@ const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu }) =
       gameStatus: 'playing',
       timeStarted: Date.now() - prev.timeElapsed * 1000
     }));
+  };
+
+  const handleRestart = () => {
+    const newMaze = createMaze(mazeSize);
+    const checkpointPositions = getCheckpointPositions(newMaze);
+    const checkpoints = createCheckpoints(checkpointPositions);
+
+    setGameState({
+      playerPosition: { x: 1, y: 1 },
+      score: 0,
+      timeStarted: Date.now(),
+      timeElapsed: 0,
+      checkpoints,
+      completedCheckpoints: 0,
+      gameStatus: 'playing',
+      currentQuiz: null,
+      showQuiz: false
+    });
+    setLastCheckpointPosition({ x: 1, y: 1 });
+    setMaze(newMaze);
   };
 
   return (
@@ -234,7 +341,17 @@ const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu }) =
         <PauseMenu
           onResume={handleResume}
           onBackToMenu={onBackToMenu}
+          onRestart={handleRestart}
         />
+      )}
+
+
+      {showFinishWarning && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <div className="bg-red-100 text-red-800 px-6 py-4 rounded-2xl shadow-xl text-lg font-semibold animate-pulse transform transition-all pointer-events-auto">
+            🚩 Selesaikan semua checkpoint sebelum ke garis finish!
+          </div>
+        </div>
       )}
     </div>
   );

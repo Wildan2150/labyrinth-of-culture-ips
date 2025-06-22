@@ -1,18 +1,19 @@
 import React from 'react';
-import { Play, Home } from 'lucide-react';
+import { Play, Home, RotateCcw } from 'lucide-react';
 
 interface PauseMenuProps {
   onResume: () => void;
   onBackToMenu: () => void;
+  onRestart: () => void;
 }
 
-const PauseMenu: React.FC<PauseMenuProps> = ({ onResume, onBackToMenu }) => {
+const PauseMenu: React.FC<PauseMenuProps> = ({ onResume, onBackToMenu, onRestart }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Permainan Dijeda</h2>
-          <p className="text-gray-600">Pilih untuk melanjutkan atau kembali ke menu</p>
+          <p className="text-gray-600">Pilih untuk melanjutkan, mulai ulang atau kembali ke menu</p>
         </div>
 
         <div className="space-y-4">
@@ -22,6 +23,13 @@ const PauseMenu: React.FC<PauseMenuProps> = ({ onResume, onBackToMenu }) => {
           >
             <Play className="w-5 h-5" />
             Lanjutkan
+          </button>
+          <button
+            onClick={onRestart}
+            className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
+          >
+            <RotateCcw className="w-5 h-5" />
+            Mulai Ulang
           </button>
 
           <button

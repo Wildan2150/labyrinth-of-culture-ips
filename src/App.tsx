@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import MainMenu from './components/MainMenu';
 import Instructions from './components/Instructions';
 import HighScores from './components/HighScores';
@@ -11,8 +11,10 @@ type GameView = 'menu' | 'instructions' | 'highscores' | 'playing' | 'finished';
 function App() {
   const [currentView, setCurrentView] = useState<GameView>('menu');
   const [gameResults, setGameResults] = useState<{ score: number; time: number } | null>(null);
+  const [mazeSize, setMazeSize] = useState(19);
 
-  const handleStartGame = () => {
+  const handleStartGame = (size: number) => {
+    setMazeSize(size);
     setCurrentView('playing');
     setGameResults(null);
   };
@@ -53,6 +55,7 @@ function App() {
         <GameScreen 
           onGameFinish={handleGameFinish}
           onBackToMenu={handleBackToMenu}
+          mazeSize={mazeSize}
         />
       );
     

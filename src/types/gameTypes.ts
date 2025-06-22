@@ -4,7 +4,7 @@ export interface Position {
 }
 
 export interface Quiz {
-  id: number;
+  id: string;
   question: string;
   options: string[];
   correctAnswer: number;
@@ -15,6 +15,7 @@ export interface Checkpoint {
   position: Position;
   quiz: Quiz;
   completed: boolean;
+  attempted?: boolean; 
 }
 
 export interface GameState {
