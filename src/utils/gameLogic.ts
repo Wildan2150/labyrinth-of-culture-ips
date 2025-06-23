@@ -10,10 +10,8 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 // Complex maze layout with strategically placed checkpoints
-export const createMaze = (size: number): MazeCell[][] => {
-    const maze: MazeCell[][] = Array.from({ length: size }, () =>
-    Array(size).fill(0)
-  );
+export const createMaze = (size: number, checkpointCount: number): MazeCell[][] => {
+  const maze: MazeCell[][] = Array.from({ length: size }, () => Array(size).fill(0));
 
   function carve(x: number, y: number) {
     maze[y][x] = 1;
@@ -36,6 +34,7 @@ export const createMaze = (size: number): MazeCell[][] => {
       }
     }
   }
+
   function bfsFarthestCell(startX: number, startY: number, maze: MazeCell[][]): [number, number] {
     const visited = Array.from({ length: maze.length }, () => Array(maze.length).fill(false));
     const queue: Array<{ x: number, y: number, dist: number }> = [{ x: startX, y: startY, dist: 0 }];
@@ -67,38 +66,119 @@ export const createMaze = (size: number): MazeCell[][] => {
     }
     return [farthest.x, farthest.y];
   }
+
+  // Helper: Cek apakah cell (x, y) tidak berdempetan dengan checkpoint lain
+  function isNotAdjacent(x: number, y: number, checkpoints: [number, number][], minDistance: number = 1) {
+    return checkpoints.every(([cx, cy]) => {
+      const distance = Math.abs(cx - x) + Math.abs(cy - y); // Manhattan distance
+      return distance > minDistance;
+    });
+  }
+
   carve(1, 1);
 
   // Cari cell path terjauh dari start (1,1) dengan BFS
   const [fx, fy] = bfsFarthestCell(1, 1, maze);
   maze[fy][fx] = 3;
 
-  function isFarEnough(x: number, y: number, checkpoints: [number, number][], minDist: number): boolean {
-    return checkpoints.every(([cx, cy]) => {
-      const dist = Math.abs(cx - x) + Math.abs(cy - y);
-      return dist >= minDist;
-    });
-  }
-  // Tempatkan beberapa checkpoint secara acak di path
+  // Kumpulkan semua path cells (exclude start dan finish)
   const pathCells: [number, number][] = [];
   for (let y = 1; y < size - 1; y++) {
     for (let x = 1; x < size - 1; x++) {
-      if (maze[y][x] === 1) pathCells.push([x, y]);
-    }
-  }
-  const checkpointCount = 20;
-  const minCheckpointDist = 3; // minimal jarak antar checkpoint (bisa diubah)
-  const chosenCheckpoints: [number, number][] = [];
-
-  for (const [x, y] of shuffle(pathCells)) {
-    if (chosenCheckpoints.length >= checkpointCount) break;
-    if (isFarEnough(x, y, chosenCheckpoints, minCheckpointDist)) {
-      chosenCheckpoints.push([x, y]);
-      maze[y][x] = 2;
+      if (maze[y][x] === 1 && !(x === 1 && y === 1) && !(x === fx && y === fy)) {
+        pathCells.push([x, y]);
+      }
     }
   }
 
+  // Pastikan kita punya cukup path cells
+  if (pathCells.length < checkpointCount) {
+    console.warn(`Path cells (${pathCells.length}) kurang dari checkpoint yang diminta (${checkpointCount}). Membuat ulang maze...`);
+    return createMaze(size, checkpointCount);
+  }
+
+  let chosenCheckpoints: [number, number][] = [];
+
+  // Strategi 1: Coba dengan jarak optimal
+  let maxDistance = Math.floor(Math.sqrt(pathCells.length / checkpointCount));
+
+  for (let minDistance = maxDistance; minDistance >= 0 && chosenCheckpoints.length < checkpointCount; minDistance--) {
+    chosenCheckpoints = [];
+    const shuffled = shuffle([...pathCells]);
+
+    for (const [x, y] of shuffled) {
+      if (chosenCheckpoints.length >= checkpointCount) break;
+      if (minDistance === 0 || isNotAdjacent(x, y, chosenCheckpoints, minDistance)) {
+        chosenCheckpoints.push([x, y]);
+      }
+    }
+  }
+
+  // Strategi 2: Jika masih kurang, gunakan grid-based placement
+  if (chosenCheckpoints.length < checkpointCount) {
+    chosenCheckpoints = [];
+    const gridSize = Math.ceil(Math.sqrt(checkpointCount));
+    const stepX = Math.max(1, Math.floor((size - 2) / gridSize));
+    const stepY = Math.max(1, Math.floor((size - 2) / gridSize));
+
+    // Cari checkpoint dengan pola grid
+    for (let gy = 0; gy < gridSize && chosenCheckpoints.length < checkpointCount; gy++) {
+      for (let gx = 0; gx < gridSize && chosenCheckpoints.length < checkpointCount; gx++) {
+        const centerX = 1 + (gx * stepX) + Math.floor(stepX / 2);
+        const centerY = 1 + (gy * stepY) + Math.floor(stepY / 2);
+
+        // Cari path cell terdekat dari center grid
+        let bestCell: [number, number] | null = null;
+        let bestDistance = Infinity;
+
+        for (const [px, py] of pathCells) {
+          if (chosenCheckpoints.some(([cx, cy]) => cx === px && cy === py)) continue;
+
+          const dist = Math.abs(px - centerX) + Math.abs(py - centerY);
+          if (dist < bestDistance) {
+            bestDistance = dist;
+            bestCell = [px, py];
+          }
+        }
+
+        if (bestCell) {
+          chosenCheckpoints.push(bestCell);
+        }
+      }
+    }
+  }
+
+  // Strategi 3: Paksa ambil cell acak jika masih kurang
+  if (chosenCheckpoints.length < checkpointCount) {
+    const remainingCells = pathCells.filter(([x, y]) =>
+      !chosenCheckpoints.some(([cx, cy]) => cx === x && cy === y)
+    );
+
+    const shuffledRemaining = shuffle(remainingCells);
+    const needed = checkpointCount - chosenCheckpoints.length;
+
+    for (let i = 0; i < needed && i < shuffledRemaining.length; i++) {
+      chosenCheckpoints.push(shuffledRemaining[i]);
+    }
+  }
+
+  // Strategi 4: Terakhir, jika masih tidak cukup, buat ulang maze
+  if (chosenCheckpoints.length < checkpointCount) {
+    console.warn(`Gagal membuat ${checkpointCount} checkpoint setelah semua strategi. Membuat ulang maze...`);
+    return createMaze(size, checkpointCount);
+  }
+
+  // Potong jika berlebih (safety net)
+  chosenCheckpoints = chosenCheckpoints.slice(0, checkpointCount);
+
+  // Tempatkan checkpoint ke maze
+  for (const [x, y] of chosenCheckpoints) {
+    maze[y][x] = 2;
+  }
+
+  // Pastikan start position tetap sebagai path
   maze[1][1] = 1;
+
   return maze;
 };
 

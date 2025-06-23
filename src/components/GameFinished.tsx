@@ -21,7 +21,7 @@ const GameFinished: React.FC<GameFinishedProps> = ({ score, time, onPlayAgain, o
           <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full mb-6 shadow-2xl animate-bounce">
             <Trophy className="w-12 h-12 text-white" />
           </div>
-          
+
           {isHighScore && (
             <div className="mb-4">
               <div className="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full font-bold">
@@ -30,7 +30,7 @@ const GameFinished: React.FC<GameFinishedProps> = ({ score, time, onPlayAgain, o
               </div>
             </div>
           )}
-          
+
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Selamat!
           </h1>
@@ -44,7 +44,7 @@ const GameFinished: React.FC<GameFinishedProps> = ({ score, time, onPlayAgain, o
           <div className="text-center mb-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Hasil Permainan</h2>
           </div>
-          
+
           <div className="space-y-6">
             {/* Final Score */}
             <div className="text-center">
@@ -72,8 +72,25 @@ const GameFinished: React.FC<GameFinishedProps> = ({ score, time, onPlayAgain, o
 
           {/* Cultural Learning Message */}
           <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4">
-            <p className="text-green-800 text-center font-medium">
-              🎉 Kamu telah mempelajari keberagaman budaya Indonesia! 🇮🇩
+            <p className="text-green-800 font-medium flex items-center justify-center gap-3">
+              {/* Bendera di sisi kiri */}
+              <img
+                src="https://hatscripts.github.io/circle-flags/flags/id.svg"
+                alt="Bendera Indonesia"
+                className="w-7 h-7 rounded-full border border-amber-300 shadow flex-shrink-0"
+              />
+
+              {/* Teks di tengah */}
+              <span className="text-center">
+                Kamu telah mempelajari keberagaman budaya Indonesia!
+              </span>
+
+              {/* Bendera di sisi kanan */}
+              <img
+                src="https://hatscripts.github.io/circle-flags/flags/id.svg"
+                alt="Bendera Indonesia"
+                className="w-7 h-7 rounded-full border border-amber-300 shadow flex-shrink-0"
+              />
             </p>
           </div>
         </div>

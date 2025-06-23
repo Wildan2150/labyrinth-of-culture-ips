@@ -8,6 +8,17 @@ interface HighScoresProps {
 }
 
 const HighScores: React.FC<HighScoresProps> = ({ onBackToMenu }) => {
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onBackToMenu();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onBackToMenu]);
+
+
   const highScores = getHighScores();
 
   return (
@@ -33,19 +44,17 @@ const HighScores: React.FC<HighScoresProps> = ({ onBackToMenu }) => {
           ) : (
             <div className="divide-y divide-gray-100">
               {highScores.map((score, index) => (
-                <div 
-                  key={index} 
-                  className={`p-6 flex items-center justify-between hover:bg-gray-50 transition-colors ${
-                    index === 0 ? 'bg-gradient-to-r from-yellow-50 to-orange-50' : ''
-                  }`}
+                <div
+                  key={index}
+                  className={`p-6 flex items-center justify-between hover:bg-gray-50 transition-colors ${index === 0 ? 'bg-gradient-to-r from-yellow-50 to-orange-50' : ''
+                    }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg ${
-                      index === 0 ? 'bg-gradient-to-br from-yellow-400 to-orange-500 text-white' :
-                      index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-400 text-white' :
-                      index === 2 ? 'bg-gradient-to-br from-orange-300 to-orange-400 text-white' :
-                      'bg-gray-100 text-gray-600'
-                    }`}>
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg ${index === 0 ? 'bg-gradient-to-br from-yellow-400 to-orange-500 text-white' :
+                        index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-400 text-white' :
+                          index === 2 ? 'bg-gradient-to-br from-orange-300 to-orange-400 text-white' :
+                            'bg-gray-100 text-gray-600'
+                      }`}>
                       {index + 1}
                     </div>
                     <div>
@@ -65,7 +74,7 @@ const HighScores: React.FC<HighScoresProps> = ({ onBackToMenu }) => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {index === 0 && (
                     <div className="text-2xl">👑</div>
                   )}

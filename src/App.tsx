@@ -12,9 +12,11 @@ function App() {
   const [currentView, setCurrentView] = useState<GameView>('menu');
   const [gameResults, setGameResults] = useState<{ score: number; time: number } | null>(null);
   const [mazeSize, setMazeSize] = useState(19);
+  const [checkpointCount, setCheckpointCount] = useState(20);
 
-  const handleStartGame = (size: number) => {
+const handleStartGame = (size: number, checkpointCount: number) => {
     setMazeSize(size);
+    setCheckpointCount(checkpointCount);
     setCurrentView('playing');
     setGameResults(null);
   };
@@ -56,6 +58,7 @@ function App() {
           onGameFinish={handleGameFinish}
           onBackToMenu={handleBackToMenu}
           mazeSize={mazeSize}
+          checkpointCount={checkpointCount}
         />
       );
     

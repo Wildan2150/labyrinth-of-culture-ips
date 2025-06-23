@@ -6,6 +6,17 @@ interface InstructionsProps {
 }
 
 const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onBackToMenu();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onBackToMenu]);
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 p-4">
       <div className="max-w-2xl mx-auto">
@@ -105,7 +116,7 @@ const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
                 </div>
               </div>
             </div>
-            
+
             {/* Level Selector Info */}
             <div>
               <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -117,13 +128,13 @@ const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-1">
                   <li>
-                    <span className="font-semibold text-green-700">Easy</span>: Labirin kecil (11x11), cocok untuk pemula.
+                    <span className="font-semibold text-green-700">Easy</span>: Labirin kecil (11x11), 10 soal kuis.
                   </li>
                   <li>
-                    <span className="font-semibold text-yellow-700">Normal</span>: Labirin sedang (19x19), tantangan seimbang.
+                    <span className="font-semibold text-yellow-700">Normal</span>: Labirin sedang (19x19), 20 soal kuis.
                   </li>
                   <li>
-                    <span className="font-semibold text-red-700">Hard</span>: Labirin besar (35x35), untuk pemain berpengalaman.
+                    <span className="font-semibold text-red-700">Hard</span>: Labirin besar (35x35), 30 soal kuis.
                   </li>
                 </ul>
                 <p className="text-gray-700 mt-2">

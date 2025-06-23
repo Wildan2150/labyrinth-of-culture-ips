@@ -13,10 +13,11 @@ interface GameScreenProps {
   onGameFinish: (score: number, time: number) => void;
   onBackToMenu: () => void;
   mazeSize: number;
+  checkpointCount: number; 
 }
 
-const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu, mazeSize }) => {
-  const [maze, setMaze] = useState(() => createMaze(mazeSize));
+const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu, mazeSize, checkpointCount }) => {
+  const [maze, setMaze] = useState(() => createMaze(mazeSize, checkpointCount));
   const [gameState, setGameState] = useState<GameState>(() => {
     const checkpointPositions = getCheckpointPositions(maze);
     const checkpoints = createCheckpoints(checkpointPositions);
@@ -293,7 +294,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ onGameFinish, onBackToMenu, maz
   };
 
   const handleRestart = () => {
-    const newMaze = createMaze(mazeSize);
+    const newMaze = createMaze(mazeSize, checkpointCount);
     const checkpointPositions = getCheckpointPositions(newMaze);
     const checkpoints = createCheckpoints(checkpointPositions);
 

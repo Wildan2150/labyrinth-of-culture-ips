@@ -1,23 +1,15 @@
 import React, { useState } from 'react';
 import { Play, HelpCircle, Trophy, Palette } from 'lucide-react';
+import LevelSelector from './LevelSelector';
 
 interface MainMenuProps {
-  onStartGame: (mazeSize: number) => void;
+  onStartGame: (mazeSize: number, checkpointCount: number) => void;
   onShowInstructions: () => void;
   onShowHighScores: () => void;
 }
 
 const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowInstructions, onShowHighScores }) => {
-  const [level, setLevel] = useState<'easy' | 'normal' | 'hard'>('normal');
-
-  const getMazeSize = () => {
-    switch (level) {
-      case 'easy': return 11;
-      case 'normal': return 19;
-      case 'hard': return 35;
-      default: return 19;
-    }
-  };
+  const [showLevelSelector, setShowLevelSelector] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-100 via-orange-50 to-red-100 flex items-center justify-center p-4">
@@ -38,44 +30,10 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowInstructions, on
           </p>
         </div>
 
-        {/* Level Selector */}
-        <div className="flex justify-center gap-2 mb-6">
-          <button
-            className={`px-4 py-2 rounded-full font-bold transition-colors duration-150 ${
-              level === 'easy'
-                ? 'bg-green-600 text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-            onClick={() => setLevel('easy')}
-          >
-            Easy
-          </button>
-          <button
-            className={`px-4 py-2 rounded-full font-bold transition-colors duration-150 ${
-              level === 'normal'
-                ? 'bg-yellow-500 text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-            onClick={() => setLevel('normal')}
-          >
-            Normal
-          </button>
-          <button
-            className={`px-4 py-2 rounded-full font-bold transition-colors duration-150 ${
-              level === 'hard'
-                ? 'bg-red-500 text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-            onClick={() => setLevel('hard')}
-          >
-            Hard
-          </button>
-        </div>
-
         {/* Menu Buttons */}
         <div className="space-y-4">
           <button
-            onClick={() => onStartGame(getMazeSize())}
+            onClick={() => setShowLevelSelector(true)}
             className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-3"
           >
             <Play className="w-6 h-6" />
@@ -108,7 +66,29 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowInstructions, on
             Suku Bangsa • Rumah Adat • Tarian • Alat Musik • Senjata Tradisional
           </p>
         </div>
+
+        {/* credits */}
+        <div className="w-full flex flex-col items-center pointer-events-none z-10 mt-8">
+          <div className="bg-white/80 rounded-xl px-4 py-2 shadow text-xs text-gray-600 pointer-events-auto">
+            Dibuat oleh <a
+              href="https://github.com/Wildan2150/labyrinth-of-culture-ips"
+              className="font-semibold text-amber-700"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Wildan Nashihin</a> &mdash; 2025
+          </div>
+        </div>
       </div>
+
+      {/* Level Selector Modal */}
+      <LevelSelector
+        open={showLevelSelector}
+        onSelect={({ size, checkpointCount }) => {
+          setShowLevelSelector(false);
+          onStartGame(size, checkpointCount);
+        }}
+        onClose={() => setShowLevelSelector(false)}
+      />
     </div>
   );
 };
