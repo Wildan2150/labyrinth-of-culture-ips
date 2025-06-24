@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Quiz as QuizType } from '../types/gameTypes';
 import { CheckCircle, XCircle, HelpCircle } from 'lucide-react';
 
@@ -22,8 +22,22 @@ const Quiz: React.FC<QuizProps> = ({ quiz, onAnswer }) => {
 
     setTimeout(() => {
       onAnswer(correct);
-    }, 1000);
+    }, 1200);
   };
+
+  // Tambahkan event listener untuk key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (showResult) return;
+      const key = e.key.toLowerCase();
+      if (key === 'a') handleAnswer(0);
+      if (key === 'b') handleAnswer(1);
+      if (key === 'c') handleAnswer(2);
+      if (key === 'd') handleAnswer(3);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showResult]);
 
   const getOptionClass = (index: number) => {
     if (!showResult) {

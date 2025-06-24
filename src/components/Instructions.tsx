@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, ArrowUp, ArrowDown, ArrowRight, Smartphone } from 'lucide-react';
+import { ArrowLeft, ArrowUp, ArrowDown, ArrowRight, Smartphone, Monitor } from 'lucide-react';
 
 interface InstructionsProps {
   onBackToMenu: () => void;
@@ -36,8 +36,11 @@ const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
               </h3>
 
               {/* Desktop Controls */}
-              <div className="bg-gray-50 rounded-2xl p-6 mb-4">
-                <h4 className="font-semibold text-gray-700 mb-3">Desktop:</h4>
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <h4 className="font-semibold text-gray-700 mb-3 flex items-center gap-2"> 
+                  <Monitor className="w-6 h-6" /> 
+                  Desktop:
+                  </h4>
                 <div className="flex items-center justify-center gap-4 mb-3">
                   <div className="bg-white p-3 rounded-lg shadow-md">
                     <ArrowUp className="w-6 h-6 text-gray-600" />
@@ -54,7 +57,24 @@ const Instructions: React.FC<InstructionsProps> = ({ onBackToMenu }) => {
                     <ArrowRight className="w-6 h-6 text-gray-600" />
                   </div>
                 </div>
-                <p className="text-gray-600 text-center mt-3">Gunakan tombol panah di keyboard untuk bergerak</p>
+                <p className="text-gray-600 text-center mt-3">
+                  Gunakan tombol panah di keyboard untuk bergerak
+                </p>
+                <div className="mt-4">
+                  <div className="flex items-center justify-center gap-4 mb-1">
+                    {['A', 'B', 'C', 'D'].map((key) => (
+                      <span
+                        key={key}
+                        className="w-12 h-12 inline-flex items-center justify-center bg-white shadow-md px-3 py-1 rounded-lg text-xl font-semibold text-gray-600"
+                      >
+                        {key}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-gray-600 text-center mt-2">
+                    Tombol <span className="font-semibold">A</span>, <span className="font-semibold">B</span>, <span className="font-semibold">C</span>, atau <span className="font-semibold">D</span> di keyboard dapat digunakan untuk memilih jawaban saat kuis muncul
+                  </p>
+                </div>
               </div>
 
               {/* Mobile Controls */}
